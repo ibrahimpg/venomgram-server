@@ -1,21 +1,21 @@
 {
-  "name": "nodegram-server",
+  "name": "venomgram-server",
   "version": "1.0.0",
-  "description": "REST API for the Nodegram application",
+  "description": "REST API built with Node/Express/Mongoose",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ibrahimpg/nodegram-server.git"
+    "url": "git+https://github.com/ibrahimpg/venomgram-server.git"
   },
   "author": "Ibrahim PG",
-  "license": "GPL-3.0",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ibrahimpg/nodegram-server/issues"
+    "url": "https://github.com/ibrahimpg/venomgram-server/issues"
   },
-  "homepage": "https://github.com/ibrahimpg/nodegram-server#readme",
+  "homepage": "https://github.com/ibrahimpg/venomgram-server#readme",
   "dependencies": {
     "bcryptjs": "2.4.3",
     "cloudinary": "1.11.0",
@@ -23,5 +23,10 @@
     "jsonwebtoken": "8.3.0",
     "mongoose": "5.2.12",
     "multer": "1.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
