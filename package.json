@@ -4,6 +4,7 @@
   "description": "REST API built with Node/Express/Mongoose",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,7 +12,7 @@
     "url": "git+https://github.com/ibrahimpg/venomgram-server.git"
   },
   "author": "Ibrahim PG",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ibrahimpg/venomgram-server/issues"
   },
