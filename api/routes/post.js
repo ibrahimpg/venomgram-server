@@ -59,7 +59,7 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
       newPost
         .save()
         .then(() => res.json({ message: 'Picture posted.' }))
-        .catch(err => res.json({ message: err }));
+        .catch(res.sendStatus(500));
     });
 });
 
@@ -73,7 +73,7 @@ router.delete('/delete', authorization, (req, res) => {
       }
       res.json({ message: 'Delete post failed.' });
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(res.sendStatus(500));
 }); // make this delete the image on cloudinary storage
 
 // Like Post
@@ -81,7 +81,7 @@ router.patch('/like', authorization, (req, res) => {
   Post.findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
     { runValidators: true })
     .then(() => res.json({ message: 'Liked post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(res.sendStatus(500));
 });
 
 // Unlike Post
@@ -90,7 +90,7 @@ router.patch('/unlike', authorization, (req, res) => {
     .findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Unliked post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(res.sendStatus(500));
 });
 
 // Report Post
@@ -99,7 +99,7 @@ router.patch('/report', authorization, (req, res) => {
     .findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Reported post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(res.sendStatus(500));
 });
 
 module.exports = router;
