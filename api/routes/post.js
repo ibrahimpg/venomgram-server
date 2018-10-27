@@ -78,9 +78,8 @@ router.delete('/delete', authorization, (req, res) => {
 
 // Like Post
 router.patch('/like', authorization, (req, res) => {
-  Post
-    .findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
-      { runValidators: true })
+  Post.findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
+    { runValidators: true })
     .then(() => res.json({ message: 'Liked post.' }))
     .catch(err => res.json({ message: 'Error', error: err }));
 });
