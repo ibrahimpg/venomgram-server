@@ -20,14 +20,14 @@ const Post = require('../models/post');
 router.get('/check', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(users => res.json({ message: users }))
-    .catch(err => res.json({ message: err }));
+    .catch(res.sendStatus(500));
 });
 
 // View Your Profile
 router.get('/selfview', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
-    .catch(err => res.json({ message: err }));
+    .catch(res.sendStatus(500));
 });
 
 // Register User
@@ -53,11 +53,11 @@ router.post('/register', (req, res) => {
             newUser
               .save()
               .then(() => res.json({ message: 'User created.', newUser }))
-              .catch(err => res.json({ message: err }));
+              .catch(res.sendStatus(500));
           }
         });
     })
-    .catch(err => res.json({ message: err }));
+    .catch(res.sendStatus(500));
 });
 
 // Login User
@@ -75,7 +75,7 @@ router.post('/login', (req, res) => {
       }
       return res.json({ message: 'Login failed.' });
     })
-    .catch(() => res.json({ message: 'Error' }));
+    .catch(res.sendStatus(500));
 });
 
 // Update User
@@ -98,7 +98,7 @@ router.patch('/update', authorization, upload.single('display'), (req, res) => {
           .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio, display: result.url },
             { runValidators: true })
           .then(() => res.json({ message: 'User updated.' }))
-          .catch(err => res.json({ message: 'Error', error: err }));
+          .catch(res.sendStatus(500));
       }
     });
   }
