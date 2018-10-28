@@ -6,10 +6,6 @@ const app = express();
 const UserRoute = require('./api/routes/user');
 const PostRoute = require('./api/routes/post');
 
-app.use(express.json());
-
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -19,6 +15,10 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(express.json());
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
 app.use('/user', UserRoute);
 app.use('/post', PostRoute);
