@@ -20,7 +20,7 @@ const Post = require('../models/post');
 router.get('/check', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(users => res.json({ message: users }))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: err }));
 });
 
 // View Your Profile
@@ -99,7 +99,7 @@ router.patch('/update', authorization, upload.single('display'), (req, res) => {
           .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio, display: result.url },
             { runValidators: true })
           .then(() => res.json({ message: 'User updated.' }))
-          .catch(res.sendStatus(500));
+          .catch(err => res.json({ message: 'Error', error: err }));
       }
     });
   }
@@ -107,51 +107,67 @@ router.patch('/update', authorization, upload.single('display'), (req, res) => {
 
 // Delete User
 router.delete('/delete', authorization, (req, res) => {
-  Post.deleteMany({ username: req.tokenData.username })
-    .then(() => User.findByIdAndDelete(req.tokenData.id))
-    .then(() => res.json({ message: 'User deleted.' }))
-    .catch(res.sendStatus(500));
+  Post
+    .deleteMany({ username: req.tokenData.username })
+    .then(() => { // add a step here that pulls the user from all blocked, following, followers
+      User // also add a step that deletes all the pics from cloudinary as well
+        .findByIdAndDelete(req.tokenData.id)
+        .then(() => res.json({ message: 'User deleted.' }));
+    })
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
-// add a step here that pulls the user from all blocked, following, followers
-// also add a step that deletes all the pics from cloudinary as well
 
 // Follow User
 router.patch('/follow', authorization, (req, res) => {
-  User.findByIdAndUpdate(req.tokenData.id, { $addToSet: { following: req.body.username } },
-    { runValidators: true })
-    .then(() => User.findOneAndUpdate({ username: req.body.username },
-      { $addToSet: { followers: req.tokenData.username } }, { runValidators: true }))
-    .then(() => res.json({ message: 'User Followed.' }))
-    .catch(res.sendStatus(500));
+  User
+    .findByIdAndUpdate(req.tokenData.id, { $addToSet: { following: req.body.username } },
+      { runValidators: true })
+    .then(() => {
+      User
+        .findOneAndUpdate({ username: req.body.username },
+          { $addToSet: { followers: req.tokenData.username } },
+          { runValidators: true })
+        .then(() => res.json({ message: 'User Followed.' }));
+    })
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 // Unfollow User
 router.patch('/unfollow', authorization, (req, res) => {
-  User.findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
-    { runValidators: true })
-    .then(() => User.findOneAndUpdate({ username: req.body.username },
-      { $pull: { followers: req.tokenData.username } }, { runValidators: true }))
-    .then(() => res.json({ message: 'User Unfollowed.' }))
-    .catch(res.sendStatus(500));
+  User
+    .findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
+      { runValidators: true })
+    .then(() => {
+      User
+        .findOneAndUpdate({ username: req.body.username },
+          { $pull: { followers: req.tokenData.username } },
+          { runValidators: true })
+        .then(() => res.json({ message: 'User Unfollowed.' }));
+    })
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 // Block User
 router.patch('/block', authorization, (req, res) => {
-  User.findByIdAndUpdate(req.tokenData.id, { $addToSet: { blocked: req.body.username } },
-    { runValidators: true })
-    .then(() => User.findByIdAndUpdate(req.tokenData.id,
-      { $pull: { following: req.body.username } },
-      { runValidators: true }))
-    .then(() => res.json({ message: 'User blocked.' }))
-    .catch(res.sendStatus(500));
+  User
+    .findByIdAndUpdate(req.tokenData.id, { $addToSet: { blocked: req.body.username } },
+      { runValidators: true })
+    .then(() => {
+      User
+        .findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
+          { runValidators: true })
+        .then(() => res.json({ message: 'User blocked.' }));
+    })
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 // Unblock User
 router.patch('/unblock', authorization, (req, res) => {
-  User.findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
-    { runValidators: true })
+  User
+    .findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
+      { runValidators: true })
     .then(() => res.json({ message: 'User Unblocked.' }))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 module.exports = router;
