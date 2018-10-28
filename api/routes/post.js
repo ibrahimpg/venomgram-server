@@ -39,7 +39,8 @@ router.get('/explore-view/:username', (req, res) => {
 // View Profile
 router.get('/profile-view/:username/:from/:to', (req, res) => {
   Post.find({ username: req.params.username }).sort({ created: -1 })
-    .then(posts => res.json(posts.slice(req.params.from, req.params.to)))
+    .then(posts => res.json(posts.slice(parseInt(req.params.from, 10),
+      parseInt(req.params.to, 10))))
     .catch(err => res.json({ message: err }));
 });
 
