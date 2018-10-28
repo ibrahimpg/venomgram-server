@@ -27,7 +27,7 @@ router.get('/check', authorization, (req, res) => {
 router.get('/selfview', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: err }));
 });
 
 // Register User
