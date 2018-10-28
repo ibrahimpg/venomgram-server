@@ -72,7 +72,7 @@ router.post('/login', (req, res) => {
       }
       if (bcrypt.compareSync(req.body.password, user.password) === true) {
         const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_KEY, { expiresIn: '12h' });
-        return res.json({ message: 'Login successful.', token, user });
+        return res.json({ message: 'Login successful.', token, username: user.username });
       }
       return res.json({ message: 'Login failed.' });
     })
