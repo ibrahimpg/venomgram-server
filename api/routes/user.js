@@ -33,7 +33,8 @@ router.get('/selfview', authorization, (req, res) => {
 // Register User
 router.post('/register', (req, res) => {
   User
-    .find({ username: req.body.username }).exec()
+    .find({ username: req.body.username })
+    .exec()
     .then((user) => {
       if (user.length >= 1 || req.body.password.length < 6) {
         res.json({ message: 'Registration failed.' });
@@ -53,11 +54,11 @@ router.post('/register', (req, res) => {
             newUser
               .save()
               .then(() => res.json({ message: 'User created.', newUser }))
-              .catch(res.sendStatus(500));
+              .catch(err => res.json({ message: err }));
           }
         });
     })
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: err }));
 });
 
 // Login User
