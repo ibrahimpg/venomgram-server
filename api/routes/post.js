@@ -59,7 +59,7 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
       newPost
         .save()
         .then(() => res.json({ message: 'Picture posted.' }))
-        .catch(res.sendStatus(500));
+        .catch(err => res.json({ message: err }));
     });
 });
 
