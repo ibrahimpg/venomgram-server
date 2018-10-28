@@ -40,7 +40,7 @@ router.get('/explore-view/:username', (req, res) => {
 router.get('/profile-view/:username', (req, res) => {
   Post.find({ username: req.params.username })
     .sort({ created: -1 })
-    .then(posts => res.json({ message: posts }))
+    .then(posts => res.json(posts))
     .catch(err => res.json({ message: err }));
 });
 
