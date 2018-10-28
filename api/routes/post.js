@@ -15,15 +15,15 @@ const Post = require('../models/post');
 const User = require('../models/user');
 
 // View Feed
-router.get('/feed-view/:username', (req, res) => {
+router.get('/feed-view/:username/:from/:to', (req, res) => {
   User.findOne({ username: req.params.username })
     .then(user => Post.find({ username: { $in: user.following } }).sort({ created: -1 }))
-    .then(posts => res.json({ message: posts }))
-    .catch(res.sendStatus(500));
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
+    .catch(err => res.json({ message: err }));
 });
 
 // View Explore
-router.get('/explore-view/:username', (req, res) => {
+router.get('/explore-view/:username/:from/:to', (req, res) => {
   User.findOne({ username: req.params.username })
     .then(user => Post.find({
       $and: [
@@ -32,15 +32,15 @@ router.get('/explore-view/:username', (req, res) => {
         { username: { $ne: user.username } },
       ],
     }).sort({ created: -1 }))
-    .then(posts => res.json({ message: posts }))
-    .catch(res.sendStatus(500));
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
+    .catch(err => res.json({ message: err }));
 });
 
 // View Profile
 router.get('/profile-view/:username/:from/:to', (req, res) => {
-  Post.find({ username: req.params.username }).sort({ created: -1 })
-    .then(posts => res.json(posts.slice(parseInt(req.params.from, 10),
-      parseInt(req.params.to, 10))))
+  Post.find({ username: req.params.username })
+    .sort({ created: -1 })
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
     .catch(err => res.json({ message: err }));
 });
 
@@ -66,7 +66,9 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
 
 // Delete Post
 router.delete('/delete', authorization, (req, res) => {
-  Post.findOne({ _id: req.body.id }).exec()
+  Post
+    .findOne({ _id: req.body.id })
+    .exec()
     .then((post) => {
       if (post.username === req.tokenData.username) {
         post.remove();
@@ -74,15 +76,17 @@ router.delete('/delete', authorization, (req, res) => {
       }
       res.json({ message: 'Delete post failed.' });
     })
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: 'Error', error: err }));
 }); // make this delete the image on cloudinary storage
+// when posting an image, you can attach a tag thru cloudinary of the user's name
 
 // Like Post
 router.patch('/like', authorization, (req, res) => {
-  Post.findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
-    { runValidators: true })
+  Post
+    .findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
+      { runValidators: true })
     .then(() => res.json({ message: 'Liked post.' }))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 // Unlike Post
@@ -91,7 +95,7 @@ router.patch('/unlike', authorization, (req, res) => {
     .findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Unliked post.' }))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 // Report Post
@@ -100,7 +104,7 @@ router.patch('/report', authorization, (req, res) => {
     .findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Reported post.' }))
-    .catch(res.sendStatus(500));
+    .catch(err => res.json({ message: 'Error', error: err }));
 });
 
 module.exports = router;
