@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
       }
       return res.json({ message: 'Login failed.' });
     })
-    .catch(() => res.json({ message: 'Error' }));
+    .catch(() => res.json({ message: 'Login failed.' }));
 });
 
 // Update User
