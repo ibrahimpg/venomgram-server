@@ -150,7 +150,7 @@ router.patch('/unblock', authorization, (req, res) => {
   User.findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
     { runValidators: true })
     .then(() => res.json({ message: 'User Unblocked.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(res.sendStatus(500));
 });
 
 module.exports = router;
