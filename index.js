@@ -34,6 +34,6 @@ app.use((error, req, res) => {
   res.json({ error: { message: error.message } });
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8888;
 
 app.listen(port);
