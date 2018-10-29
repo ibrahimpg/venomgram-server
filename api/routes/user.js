@@ -16,13 +16,6 @@ const authorization = require('../middleware/authorization');
 const User = require('../models/user');
 const Post = require('../models/post');
 
-// Check If User Logged In
-router.get('/check', authorization, (req, res) => {
-  User.findOne({ username: req.tokenData.username })
-    .then(users => res.json({ message: users }))
-    .catch(err => res.json({ message: err }));
-});
-
 // View Your Profile Details
 router.get('/self-view', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
