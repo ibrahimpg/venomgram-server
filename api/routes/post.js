@@ -55,7 +55,7 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         username: req.tokenData.username,
         caption: req.body.caption,
-        path: result.url,
+        path: result.secure_url,
       });
       newPost
         .save()
