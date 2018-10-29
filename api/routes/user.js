@@ -105,9 +105,9 @@ router.delete('/delete', authorization, (req, res) => {
     .then(() => { // add a step here that pulls the user from all blocked, following, followers
       User // also add a step that deletes all the pics from cloudinary as well
         .findByIdAndDelete(req.tokenData.id)
-        .then(() => res.json({ message: 'User deleted.' }));
+        .then(() => res.json('User deleted.'));
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.json(err));
 });
 
 // Follow User
@@ -120,9 +120,9 @@ router.patch('/follow', authorization, (req, res) => {
         .findOneAndUpdate({ username: req.body.username },
           { $addToSet: { followers: req.tokenData.username } },
           { runValidators: true })
-        .then(() => res.json({ message: 'User Followed.' }));
+        .then(() => res.json('User Followed.'));
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.json(err));
 });
 
 // Unfollow User
@@ -135,9 +135,9 @@ router.patch('/unfollow', authorization, (req, res) => {
         .findOneAndUpdate({ username: req.body.username },
           { $pull: { followers: req.tokenData.username } },
           { runValidators: true })
-        .then(() => res.json({ message: 'User Unfollowed.' }));
+        .then(() => res.json('User Unfollowed.'));
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.json(err));
 });
 
 // Block User
@@ -149,9 +149,9 @@ router.patch('/block', authorization, (req, res) => {
       User
         .findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
           { runValidators: true })
-        .then(() => res.json({ message: 'User blocked.' }));
+        .then(() => res.json('User blocked.'));
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.json(err));
 });
 
 // Unblock User
@@ -159,8 +159,8 @@ router.patch('/unblock', authorization, (req, res) => {
   User
     .findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
       { runValidators: true })
-    .then(() => res.json({ message: 'User Unblocked.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .then(() => res.json('User Unblocked.'))
+    .catch(err => res.json(err));
 });
 
 module.exports = router;
