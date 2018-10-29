@@ -96,7 +96,7 @@ router.patch('/update', authorization, upload.single('display'), (req, res) => {
         res.json(error);
       } else {
         User
-          .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio, display: result.url },
+          .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio, display: result.secure_url },
             { runValidators: true })
           .then(() => res.json({ message: 'User updated.' }))
           .catch(err => res.json({ message: 'Error', error: err }));
