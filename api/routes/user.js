@@ -23,7 +23,7 @@ router.get('/check', authorization, (req, res) => {
     .catch(err => res.json({ message: err }));
 });
 
-// View Your Profile
+// View Your Profile Details
 router.get('/selfview', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
