@@ -24,7 +24,7 @@ router.get('/check', authorization, (req, res) => {
 });
 
 // View Your Profile Details
-router.get('/selfview', authorization, (req, res) => {
+router.get('/self-view', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
     .catch(err => res.json({ message: err }));
