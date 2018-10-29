@@ -7,6 +7,6 @@ module.exports = (req, res, next) => {
     req.tokenData = decoded;
     next();
   } catch (err) {
-    res.json({ message: 'Authentication Failed.' });
+    res.json('Authentication Failed.');
   }
 };
