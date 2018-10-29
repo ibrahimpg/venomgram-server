@@ -23,8 +23,8 @@ router.get('/check', authorization, (req, res) => {
     .catch(err => res.json({ message: err }));
 });
 
-// View Your Profile
-router.get('/selfview', authorization, (req, res) => {
+// View Your Profile Details
+router.get('/self-view', authorization, (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
     .catch(err => res.json({ message: err }));
@@ -72,11 +72,11 @@ router.post('/login', (req, res) => {
       }
       if (bcrypt.compareSync(req.body.password, user.password) === true) {
         const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_KEY, { expiresIn: '12h' });
-        return res.json({ message: 'Login successful.', token, user });
+        return res.json({ message: 'Login successful.', token, username: user.username });
       }
       return res.json({ message: 'Login failed.' });
     })
-    .catch(() => res.json({ message: 'Error' }));
+    .catch(() => res.json({ message: 'Login failed.' }));
 });
 
 // Update User

@@ -15,40 +15,32 @@ const Post = require('../models/post');
 const User = require('../models/user');
 
 // View Feed
-router.get('/feed-view/:username', (req, res) => {
+router.get('/feed-view/:username/:from/:to', (req, res) => {
   User.findOne({ username: req.params.username })
-    .then((user) => {
-      Post.find({ username: { $in: user.following } })
-        .sort({ created: -1 })
-        .then((posts) => {
-          res.json({ message: posts });
-        });
-    })
+    .then(user => Post.find({ username: { $in: user.following } }).sort({ created: -1 }))
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
     .catch(err => res.json({ message: err }));
 });
 
 // View Explore
-router.get('/explore-view/:username', (req, res) => {
+router.get('/explore-view/:username/:from/:to', (req, res) => {
   User.findOne({ username: req.params.username })
-    .then((user) => {
-      Post.find({
-        $and: [{ username: { $nin: user.blocked } },
-          { username: { $nin: user.following } },
-          { username: { $ne: user.username } }],
-      })
-        .sort({ created: -1 })
-        .then((posts) => {
-          res.json({ message: posts });
-        });
-    })
+    .then(user => Post.find({
+      $and: [
+        { username: { $nin: user.blocked } },
+        { username: { $nin: user.following } },
+        { username: { $ne: user.username } },
+      ],
+    }).sort({ created: -1 }))
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
     .catch(err => res.json({ message: err }));
 });
 
 // View Profile
-router.get('/profile-view/:username', (req, res) => {
+router.get('/profile-view/:username/:from/:to', (req, res) => {
   Post.find({ username: req.params.username })
     .sort({ created: -1 })
-    .then(posts => res.json({ message: posts }))
+    .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
     .catch(err => res.json({ message: err }));
 });
 
