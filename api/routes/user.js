@@ -49,7 +49,7 @@ router.post('/register', (req, res) => {
               username: req.body.username,
               password: bcrypt.hashSync(req.body.password, 10),
               bio: 'Bio...',
-              display: result.url,
+              display: result.secure_url,
             });
             newUser
               .save()
