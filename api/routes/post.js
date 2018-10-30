@@ -59,8 +59,8 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
       });
       newPost
         .save()
-        .then(() => res.json({ message: 'Picture posted.' }))
-        .catch(err => res.json({ message: err }));
+        .then(() => res.json('Picture posted.'))
+        .catch(err => res.json(err));
     });
 });
 
