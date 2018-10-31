@@ -49,7 +49,7 @@ router.post('/upload', authorization, upload.single('picture'), (req, res) => {
   cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg' },
     (error, result) => {
       if (error) {
-        res.json(error);
+        return res.json(error);
       }
       const newPost = new Post({
         _id: new mongoose.Types.ObjectId(),
