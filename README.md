@@ -21,7 +21,7 @@ Coming soon.
 
 * Add ability to view other's profiles
 
-* Return HTTP status codes with responses
+* Return HTTP status codes with responses. [Good resource.](https://restfulapi.net/http-status-codes/)
 
 * Add controllers folder to handle route logic
 
@@ -34,3 +34,16 @@ Coming soon.
 * Implement logging.
 
 * Implement email confirmation upon registration.
+
+* index.js should be high level set-up with no detail. Whole file should be the level of detail in lines 23-24. 
+That is, things like lines 26-35 are in a totally different level of detail. Something like...
+
+```
+const ErrorHander = require('./blablabla...');
+// ...
+app.use(ErrorHandler);
+```
+
+The same applies to lines 9-17. Maybe have that stuff in the middleware folder.
+
+* Think of handling things using only internal ID's. This makes it easier to allow people to change their username in the future.
