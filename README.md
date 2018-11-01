@@ -47,5 +47,3 @@ app.use(ErrorHandler);
 The same applies to lines 9-17. Maybe have that stuff in the middleware folder.
 
 * Think of handling things using only internal ID's. This makes it easier to allow people to change their username in the future.
-
-* Allow hyphens and underscores in usernames (maybe not more than one in a row though).

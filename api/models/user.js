@@ -4,7 +4,7 @@ const UserSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   created: { type: Date, default: Date.now },
   username: {
-    type: String, required: true, unique: true, minlength: 6, maxlength: 16, match: /^[a-z0-9]+$/,
+    type: String, required: true, unique: true, minlength: 6, maxlength: 16, match: /^[a-z0-9-_]+$/,
   },
   password: { type: String, required: true },
   bio: { type: String, required: true, maxlength: 200 },
