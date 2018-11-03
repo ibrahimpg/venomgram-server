@@ -11,7 +11,7 @@ exports.feed = (req, res) => {
   User.findOne({ username: req.params.username })
     .then(user => Post.find({ username: { $in: user.following } }).sort({ created: -1 }))
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.json({ message: err }));
+    .catch(err => res.status(500).json({ message: err }));
 };
 
 // View Explore
@@ -25,7 +25,7 @@ exports.explore = (req, res) => {
       ],
     }).sort({ created: -1 }))
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.json({ message: err }));
+    .catch(err => res.status(500).json({ message: err }));
 };
 
 // View Profile
@@ -33,7 +33,7 @@ exports.profile = (req, res) => {
   Post.find({ username: req.params.username })
     .sort({ created: -1 })
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.json({ message: err }));
+    .catch(err => res.status(500).json({ message: err }));
 };
 
 // Make Post
@@ -41,7 +41,7 @@ exports.upload = (req, res) => {
   cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg' },
     (error, result) => {
       if (error) {
-        return res.json(error);
+        return res.status(400).json(error);
       }
       const newPost = new Post({
         _id: new mongoose.Types.ObjectId(),
@@ -52,7 +52,7 @@ exports.upload = (req, res) => {
       return newPost
         .save()
         .then(() => res.status(201).json('Picture posted.'))
-        .catch(err => res.json(err));
+        .catch(err => res.status(500).json(err));
     });
 };
 
@@ -66,9 +66,9 @@ exports.delete = (req, res) => {
         post.remove();
         res.json({ message: 'Post deleted.' });
       }
-      res.json({ message: 'Delete post failed.' });
+      res.status(403).json({ message: 'Delete post failed.' });
     })
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Like Post
@@ -77,7 +77,7 @@ exports.like = (req, res) => {
     .findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Liked post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Unlike Post
@@ -86,7 +86,7 @@ exports.unlike = (req, res) => {
     .findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Unliked post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Report Post
@@ -95,5 +95,5 @@ exports.report = (req, res) => {
     .findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
       { runValidators: true })
     .then(() => res.json({ message: 'Reported post.' }))
-    .catch(err => res.json({ message: 'Error', error: err }));
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
