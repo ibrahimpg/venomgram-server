@@ -80,7 +80,7 @@ exports.update = (req, res) => {
         res.status(400).json(error);
       } else {
         User
-          .findByIdAndUpdate(req.tokenData.id, { bio: '', display: result.secure_url },
+          .findByIdAndUpdate(req.tokenData.id, { bio: ' ', display: result.secure_url },
             { runValidators: true })
           .then(() => res.json('User updated.'))
           .catch(err => res.status(500).json({ message: 'Error', error: err }));
