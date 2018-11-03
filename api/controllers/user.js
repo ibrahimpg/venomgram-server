@@ -65,11 +65,11 @@ exports.login = (req, res) => {
 
 // Update User
 exports.update = (req, res) => {
-  if (req.file == null) {
+  if (req.file === null) {
     User
-      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio },
+      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio || '' },
         { runValidators: true })
-      .then(() => res.json({ message: 'User updated.' }))
+      .then(() => res.json('User updated.'))
       .catch(err => res.status(500).json({ message: 'Error', error: err }));
   } else {
     cloudinary.v2.uploader.upload(req.file.path, {
@@ -82,7 +82,7 @@ exports.update = (req, res) => {
         User
           .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio, display: result.secure_url },
             { runValidators: true })
-          .then(() => res.json({ message: 'User updated.' }))
+          .then(() => res.json('User updated.'))
           .catch(err => res.status(500).json({ message: 'Error', error: err }));
       }
     });

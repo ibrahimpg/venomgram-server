@@ -19,8 +19,6 @@ Coming soon.
 
 # To-do
 
-* Return HTTP status codes with responses. [Good resource.](https://restfulapi.net/http-status-codes/)
-
 * Promise chaining is a little sloppy. Some promises create new promises without returning the new promise (i.e. Chaining them). If an inner promise fails and that promise isn't returned, the error will not bubble up to the catch statement, there will be an unexpected promise rejection warning, and the request will hang and eventually timeout.
 
 * Allow for updating profile with an empty bio.
