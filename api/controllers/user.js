@@ -65,7 +65,7 @@ exports.login = (req, res) => {
 
 // Update User
 exports.update = (req, res) => {
-  if (req.file === null) {
+  if (req.file == null) {
     User
       .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio },
         { runValidators: true })
