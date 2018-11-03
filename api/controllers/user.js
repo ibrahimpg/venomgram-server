@@ -71,21 +71,6 @@ exports.update = (req, res) => {
         { runValidators: true })
       .then(() => res.json('User updated.'))
       .catch(err => res.status(500).json({ message: 'Error', error: err }));
-  } else if (req.body.bio === null) {
-    cloudinary.v2.uploader.upload(req.file.path, {
-      public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg',
-    },
-    (error, result) => {
-      if (error) {
-        res.status(400).json(error);
-      } else {
-        User
-          .findByIdAndUpdate(req.tokenData.id, { bio: ' ', display: result.secure_url },
-            { runValidators: true })
-          .then(() => res.json('User updated.'))
-          .catch(err => res.status(500).json({ message: 'Error', error: err }));
-      }
-    });
   } else {
     cloudinary.v2.uploader.upload(req.file.path, {
       public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg',
