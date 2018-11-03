@@ -19,20 +19,14 @@ Coming soon.
 
 # To-do
 
-* Add ability to view other's profiles
-
 * Return HTTP status codes with responses. [Good resource.](https://restfulapi.net/http-status-codes/)
 
 * Add controllers folder to handle route logic
 
 * Promise chaining is a little sloppy. Some promises create new promises without returning the new promise (i.e. Chaining them). If an inner promise fails and that promise isn't returned, the error will not bubble up to the catch statement, there will be an unexpected promise rejection warning, and the request will hang and eventually timeout.
 
-* Don't use Mongoose default connection but create one explicitly. This comes in handy when writing tests, and for mocking etc.
-
 * Allow for updating profile with an empty bio.
 
 * Implement logging.
 
 * Implement email confirmation upon registration.
-
-* Think of handling things using only internal ID's. This makes it easier to allow people to change their username in the future.
