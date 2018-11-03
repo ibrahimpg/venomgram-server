@@ -67,7 +67,7 @@ exports.login = (req, res) => {
 exports.update = (req, res) => {
   if (req.file === null) {
     User
-      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio || '' },
+      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio },
         { runValidators: true })
       .then(() => res.json('User updated.'))
       .catch(err => res.status(500).json({ message: 'Error', error: err }));

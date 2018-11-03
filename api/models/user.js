@@ -7,7 +7,7 @@ const UserSchema = mongoose.Schema({
     type: String, required: true, unique: true, minlength: 6, maxlength: 16, match: /^[a-z0-9-_]+$/,
   },
   password: { type: String, required: true },
-  bio: { type: String, required: true, maxlength: 200 },
+  bio: { type: String, maxlength: 200 },
   display: { type: String },
   followers: [{ type: String }],
   following: [{ type: String }],
