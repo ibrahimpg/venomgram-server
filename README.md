@@ -19,10 +19,6 @@ Coming soon.
 
 # To-do
 
-* Promise chaining is a little sloppy. Some promises create new promises without returning the new promise (i.e. Chaining them). If an inner promise fails and that promise isn't returned, the error will not bubble up to the catch statement, there will be an unexpected promise rejection warning, and the request will hang and eventually timeout.
-
-* Delete posts from Cloudinary storage on delete post.
-
-* Pull user from following, followed, and blocked of all other users upon account deletion.
+* Improve and refactor app logic
 
 * Implement email confirmation upon registration.
