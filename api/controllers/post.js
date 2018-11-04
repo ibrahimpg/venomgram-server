@@ -71,7 +71,7 @@ exports.delete = (req, res) => {
             return res.json({ message: 'Post deleted.' });
           });
       }
-      return res.status(403).json({ message: 'Delete post failed.' });
+      return res.status(400).json({ message: 'Delete post failed.' });
     })
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
