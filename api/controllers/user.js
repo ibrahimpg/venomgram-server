@@ -51,9 +51,6 @@ exports.login = (req, res) => {
     .findOne({ username: req.body.username })
     .exec()
     .then((user) => {
-      if (user.length < 1) {
-        return res.status(400).json({ message: 'Login failed.' });
-      }
       if (bcrypt.compareSync(req.body.password, user.password) === true) {
         const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_KEY, { expiresIn: '12h' });
         return res.json({ message: 'Login successful.', token, username: user.username });
