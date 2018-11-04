@@ -62,7 +62,7 @@ exports.delete = (req, res) => {
   Post.findOne({ _id: req.body.id }).exec()
     .then((post) => {
       if (post.username === req.tokenData.username) {
-        post.remove();
+        return post.remove();
       }
       return res.status(403).json('Delete post failed.');
     })
