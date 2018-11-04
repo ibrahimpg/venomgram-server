@@ -8,6 +8,7 @@ const PostSchema = mongoose.Schema({
   path: { type: String, required: true },
   likedBy: [{ type: String }],
   reportedBy: [{ type: String }],
+  publicId: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Post', PostSchema);

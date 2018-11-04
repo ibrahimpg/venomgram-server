@@ -38,7 +38,7 @@ exports.profile = (req, res) => {
 
 // Make Post
 exports.upload = (req, res) => {
-  cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg' },
+  cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg', tags: [req.tokenData.username] },
     (error, result) => {
       if (error) {
         return res.status(400).json(error);
@@ -48,6 +48,7 @@ exports.upload = (req, res) => {
         username: req.tokenData.username,
         caption: req.body.caption,
         path: result.secure_url,
+        publicId: result.public_id,
       });
       return newPost
         .save()
@@ -58,19 +59,22 @@ exports.upload = (req, res) => {
 
 // Delete Post
 exports.delete = (req, res) => {
-  Post
-    .findOne({ _id: req.body.id })
-    .exec()
+  Post.findOne({ _id: req.body.id }).exec()
     .then((post) => {
       if (post.username === req.tokenData.username) {
-        post.remove();
-        return res.json({ message: 'Post deleted.' });
+        cloudinary.v2.uploader.destroy(post.publicId,
+          (error) => {
+            if (error) {
+              return res.status(400).json(error);
+            }
+            post.remove();
+            return res.json({ message: 'Post deleted.' });
+          });
       }
       return res.status(403).json({ message: 'Delete post failed.' });
     })
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
-};// make this delete the image on cloudinary storage as well
-// when posting an image, you can attach a tag thru cloudinary of the user's name
+};
 
 // Like Post
 exports.like = (req, res) => {
