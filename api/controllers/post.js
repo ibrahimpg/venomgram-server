@@ -62,7 +62,9 @@ exports.delete = (req, res) => {
   Post.findOne({ _id: req.body.id }).exec()
     .then((post) => {
       if (post.username === req.tokenData.username) {
-        return post.remove().then(() => cloudinary.v2.uploader.destroy(post.publicId));
+        return post.remove()
+          .then(() => cloudinary.v2.uploader.destroy(post.publicId))
+          .then(() => res.json('Picture deleted.'));
       }
       return res.status(403).json('Delete post failed.');
     })
