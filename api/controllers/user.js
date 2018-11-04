@@ -88,12 +88,12 @@ exports.update = (req, res) => {
 
 // Delete User
 exports.delete = (req, res) => {
-  Post.deleteMany({ username: req.tokenData.username })
+  cloudinary.v2.api.delete_resources_by_tag(req.tokenData.username)
+    .then(() => Post.deleteMany({ username: req.tokenData.username }))
     .then(() => User.findByIdAndDelete(req.tokenData.id))
     .then(() => res.json('User deleted.'))
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
-// add a step that deletes all the pics from cloudinary as well
 
 // Follow User
 exports.follow = (req, res) => {
