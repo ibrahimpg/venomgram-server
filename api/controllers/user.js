@@ -97,56 +97,38 @@ exports.delete = (req, res) => {
 
 // Follow User
 exports.follow = (req, res) => {
-  User
-    .findByIdAndUpdate(req.tokenData.id, { $addToSet: { following: req.body.username } },
-      { runValidators: true })
-    .then(() => {
-      User
-        .findOneAndUpdate({ username: req.body.username },
-          { $addToSet: { followers: req.tokenData.username } },
-          { runValidators: true })
-        .then(() => res.json('User Followed.'))
-        .catch(err => res.status(500).json({ message: 'Error', error: err }));
-    })
-    .catch(err => res.status(500).json(err));
+  User.findByIdAndUpdate(req.tokenData.id, { $addToSet: { following: req.body.username } },
+    { runValidators: true })
+    .then(() => User.findOneAndUpdate({ username: req.body.username },
+      { $addToSet: { followers: req.tokenData.username } }, { runValidators: true }))
+    .then(() => res.json('User Followed.'))
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Unfollow User
 exports.unfollow = (req, res) => {
-  User
-    .findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
-      { runValidators: true })
-    .then(() => {
-      User
-        .findOneAndUpdate({ username: req.body.username },
-          { $pull: { followers: req.tokenData.username } },
-          { runValidators: true })
-        .then(() => res.json('User Unfollowed.'))
-        .catch(err => res.status(500).json({ message: 'Error', error: err }));
-    })
-    .catch(err => res.status(500).json(err));
+  User.findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
+    { runValidators: true })
+    .then(() => User.findOneAndUpdate({ username: req.body.username },
+      { $pull: { followers: req.tokenData.username } }, { runValidators: true }))
+    .then(() => res.json('User Unfollowed.'))
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Block User
 exports.block = (req, res) => {
-  User
-    .findByIdAndUpdate(req.tokenData.id, { $addToSet: { blocked: req.body.username } },
-      { runValidators: true })
-    .then(() => {
-      User
-        .findByIdAndUpdate(req.tokenData.id, { $pull: { following: req.body.username } },
-          { runValidators: true })
-        .then(() => res.json('User blocked.'))
-        .catch(err => res.status(500).json({ message: 'Error', error: err }));
-    })
-    .catch(err => res.status(500).json(err));
+  User.findByIdAndUpdate(req.tokenData.id, { $addToSet: { blocked: req.body.username } },
+    { runValidators: true })
+    .then(() => User.findByIdAndUpdate(req.tokenData.id,
+      { $pull: { following: req.body.username } }, { runValidators: true }))
+    .then(() => res.json('User blocked.'))
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Unblock User
 exports.unblock = (req, res) => {
-  User
-    .findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
-      { runValidators: true })
+  User.findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
+    { runValidators: true })
     .then(() => res.json('User Unblocked.'))
     .catch(err => res.status(500).json(err));
 };
