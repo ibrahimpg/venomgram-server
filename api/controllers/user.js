@@ -70,7 +70,7 @@ exports.update = (req, res) => {
       .catch(err => res.status(500).json({ message: 'Error', error: err }));
   }
   cloudinary.v2.uploader.upload(req.file.path, {
-    public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg',
+    public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg', tags: [req.body.username],
   },
   (error, result) => {
     if (error) {
