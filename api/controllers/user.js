@@ -24,7 +24,8 @@ exports.register = (req, res) => {
       if (user.length >= 1 || req.body.password.length < 6) {
         return res.status(400).json({ message: 'Registration failed.' });
       }
-      return cloudinary.v2.uploader.upload('./temp/placeholder.jpg', { public_id: `${req.body.username}` },
+      return cloudinary.v2.uploader.upload('./temp/placeholder.jpg',
+        { public_id: `${req.body.username}`, tags: [req.body.username] },
         (error, result) => {
           if (error) {
             return res.status(500).json(error);
