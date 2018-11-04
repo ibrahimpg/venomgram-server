@@ -62,16 +62,18 @@ exports.delete = (req, res) => {
   Post.findOne({ _id: req.body.id }).exec()
     .then((post) => {
       if (post.username === req.tokenData.username) {
-        cloudinary.v2.uploader.destroy(post.publicId,
-          (error) => {
-            if (error) {
-              return res.status(400).json(error);
-            }
-            post.remove();
-            return res.json({ message: 'Post deleted.' });
-          });
+        post.remove();
       }
-      return res.status(400).json({ message: 'Delete post failed.' });
+      return res.status(403).json('Delete post failed.');
+    })
+    .then((post) => {
+      cloudinary.v2.uploader.destroy(post.publicId,
+        (error) => {
+          if (error) {
+            return res.status(400).json('Delete post failed.');
+          }
+          return res.json({ message: 'Post deleted.' });
+        });
     })
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
