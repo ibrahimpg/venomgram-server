@@ -25,8 +25,6 @@ router.post('/upload', authorization, upload.single('picture'), PostControllers.
 
 // Delete Post
 router.delete('/delete', authorization, PostControllers.delete);
-// make this delete the image on cloudinary storage as well
-// when posting an image, you can attach a tag thru cloudinary of the user's name
 
 // Like Post
 router.patch('/like', authorization, PostControllers.like);

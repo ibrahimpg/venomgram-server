@@ -64,12 +64,13 @@ exports.delete = (req, res) => {
     .then((post) => {
       if (post.username === req.tokenData.username) {
         post.remove();
-        res.json({ message: 'Post deleted.' });
+        return res.json({ message: 'Post deleted.' });
       }
-      res.status(403).json({ message: 'Delete post failed.' });
+      return res.status(403).json({ message: 'Delete post failed.' });
     })
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
-};
+};// make this delete the image on cloudinary storage as well
+// when posting an image, you can attach a tag thru cloudinary of the user's name
 
 // Like Post
 exports.like = (req, res) => {

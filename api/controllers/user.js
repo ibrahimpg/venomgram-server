@@ -1,3 +1,4 @@
+// Modules
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
@@ -21,25 +22,24 @@ exports.register = (req, res) => {
     .exec()
     .then((user) => {
       if (user.length >= 1 || req.body.password.length < 6) {
-        res.status(400).json({ message: 'Registration failed.' });
+        return res.status(400).json({ message: 'Registration failed.' });
       }
-      cloudinary.v2.uploader.upload('./temp/placeholder.jpg', { public_id: `${req.body.username}` },
+      return cloudinary.v2.uploader.upload('./temp/placeholder.jpg', { public_id: `${req.body.username}` },
         (error, result) => {
           if (error) {
-            res.status(500).json(error);
-          } else {
-            const newUser = new User({
-              _id: new mongoose.Types.ObjectId(),
-              username: req.body.username,
-              password: bcrypt.hashSync(req.body.password, 10),
-              bio: 'Bio...',
-              display: result.secure_url,
-            });
-            newUser
-              .save()
-              .then(() => res.status(201).json({ message: 'User created.', newUser }))
-              .catch(err => res.status(500).json({ message: err }));
+            return res.status(500).json(error);
           }
+          const newUser = new User({
+            _id: new mongoose.Types.ObjectId(),
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password, 10),
+            bio: 'Bio...',
+            display: result.secure_url,
+          });
+          return newUser
+            .save()
+            .then(() => res.status(201).json({ message: 'User created.', newUser }))
+            .catch(err => res.status(500).json({ message: err }));
         });
     })
     .catch(err => res.status(500).json({ message: err }));
@@ -67,40 +67,33 @@ exports.login = (req, res) => {
 exports.update = (req, res) => {
   if (req.file == null) {
     User
-      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio },
+      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio }, { runValidators: true })
+      .then(() => res.json('User updated.'))
+      .catch(err => res.status(500).json({ message: 'Error', error: err }));
+  }
+  cloudinary.v2.uploader.upload(req.file.path, {
+    public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg',
+  },
+  (error, result) => {
+    if (error) {
+      return res.status(400).json(error);
+    }
+    return User
+      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio || ' ', display: result.secure_url },
         { runValidators: true })
       .then(() => res.json('User updated.'))
       .catch(err => res.status(500).json({ message: 'Error', error: err }));
-  } else {
-    cloudinary.v2.uploader.upload(req.file.path, {
-      public_id: `${req.tokenData.username}`, invalidate: true, format: 'jpg',
-    },
-    (error, result) => {
-      if (error) {
-        res.status(400).json(error);
-      } else {
-        User
-          .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio || ' ', display: result.secure_url },
-            { runValidators: true })
-          .then(() => res.json('User updated.'))
-          .catch(err => res.status(500).json({ message: 'Error', error: err }));
-      }
-    });
-  }
+  });
 };
 
 // Delete User
 exports.delete = (req, res) => {
-  Post
-    .deleteMany({ username: req.tokenData.username })
-    .then(() => { // add a step here that pulls the user from all blocked, following, followers
-      User // also add a step that deletes all the pics from cloudinary as well
-        .findByIdAndDelete(req.tokenData.id)
-        .then(() => res.json('User deleted.'))
-        .catch(err => res.status(500).json({ message: 'Error', error: err }));
-    })
-    .catch(err => res.status(500).json(err));
+  Post.deleteMany({ username: req.tokenData.username })
+    .then(() => User.findByIdAndDelete(req.tokenData.id))
+    .then(() => res.json('User deleted.'))
+    .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
+// add a step that deletes all the pics from cloudinary as well
 
 // Follow User
 exports.follow = (req, res) => {
