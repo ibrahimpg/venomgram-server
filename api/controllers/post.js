@@ -30,31 +30,24 @@ exports.explore = (req, res) => {
 
 // View Profile
 exports.profile = (req, res) => {
-  Post.find({ username: req.params.username })
-    .sort({ created: -1 })
+  Post.find({ username: req.params.username }).sort({ created: -1 })
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
     .catch(err => res.status(500).json({ message: err }));
 };
 
 // Make Post
 exports.upload = (req, res) => {
-  cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg', tags: [req.tokenData.username] },
-    (error, result) => {
-      if (error) {
-        return res.status(400).json(error);
-      }
-      const newPost = new Post({
-        _id: new mongoose.Types.ObjectId(),
-        username: req.tokenData.username,
-        caption: req.body.caption,
-        path: result.secure_url,
-        publicId: result.public_id,
-      });
-      return newPost
-        .save()
-        .then(() => res.status(201).json('Picture posted.'))
-        .catch(err => res.status(500).json(err));
-    });
+  cloudinary.v2.uploader.upload(req.file.path, { format: 'jpg', tags: [req.tokenData.username] })
+    .then(result => new Post({
+      _id: new mongoose.Types.ObjectId(),
+      username: req.tokenData.username,
+      caption: req.body.caption,
+      path: result.secure_url,
+      publicId: result.public_id,
+    })
+      .save()
+      .then(() => res.status(201).json('Picture posted.')))
+    .catch(() => res.status(500));
 };
 
 // Delete Post
@@ -73,27 +66,24 @@ exports.delete = (req, res) => {
 
 // Like Post
 exports.like = (req, res) => {
-  Post
-    .findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
-      { runValidators: true })
-    .then(() => res.json({ message: 'Liked post.' }))
+  Post.findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
+    { runValidators: true })
+    .then(() => res.json('Liked post.'))
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Unlike Post
 exports.unlike = (req, res) => {
-  Post
-    .findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
-      { runValidators: true })
-    .then(() => res.json({ message: 'Unliked post.' }))
+  Post.findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
+    { runValidators: true })
+    .then(() => res.json('Unliked post.'))
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
 
 // Report Post
 exports.report = (req, res) => {
-  Post
-    .findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
-      { runValidators: true })
-    .then(() => res.json({ message: 'Reported post.' }))
+  Post.findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
+    { runValidators: true })
+    .then(() => res.json('Reported post.'))
     .catch(err => res.status(500).json({ message: 'Error', error: err }));
 };
