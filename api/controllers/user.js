@@ -12,7 +12,13 @@ const Post = require('../models/post');
 // View User Profile Username/Bio
 exports.user = (req, res) => {
   User.findOne({ username: req.body.username })
-    .then(user => res.json({ bio: user.bio, username: user.username }))
+    .then(user => res.json({
+      bio: user.bio,
+      username: user.username,
+      display: user.display,
+      followers: user.followers,
+      following: user.following,
+    }))
     .catch(() => res.status(500));
 };
 
