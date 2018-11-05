@@ -41,6 +41,4 @@ And voila! You have your own copy of venomgram-server running, complete with per
 
 # To-do
 
-* Log catch errors.
-
 * Implement email confirmation upon registration.
