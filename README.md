@@ -15,10 +15,32 @@ And voila! You have your own copy of venomgram-server running, complete with per
 
 ## API
 
-Coming soon.
+|Endpoint|JWT|Variables|
+|-|:-:|:-:|
+| /post/feed/:username/:from/:to|X|None [1]|
+| /post/explore/:username/:from/:to|X|None [1]|
+| /post/profile/:username/:from/:to|X|None [1]|
+| /post/upload|✓|file|
+| /post/delete|✓|id|
+| /post/like|✓|id|
+| /post/unlike|✓|id|
+| /post/report|✓|id|
+| /user/self|✓|None [2]|
+| /user/register|X|username, password|
+| /user/login|X|username, password|
+| /user/update|✓|file [3], bio|
+| /user/delete|✓|None [2]|
+| /user/follow|✓|username|
+| /user/unfollow|✓|username|
+| /user/block|✓|username|
+| /user/unblock|✓|username|
+
+1. Operate entirely on endpoint params.
+2. Operate entirely on JSON web token.
+3. Optional. Will only update bio if not sent.
 
 # To-do
 
-* Improve and refactor app logic
+* Log catch errors.
 
 * Implement email confirmation upon registration.
