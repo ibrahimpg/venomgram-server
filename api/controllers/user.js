@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 // Modules
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -12,7 +13,7 @@ const Post = require('../models/post');
 exports.self = (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(() => res.status(500));
 };
 
 // Register User
@@ -38,10 +39,10 @@ exports.register = (req, res) => {
             display: result.secure_url,
           }).save()
             .then(() => res.status(201).json('User created.'))
-            .catch(err => res.status(500).json({ message: err }));
+            .catch(() => res.status(500));
         });
     })
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(() => res.status(500));
 };
 
 // Login User
@@ -49,8 +50,10 @@ exports.login = (req, res) => {
   User.findOne({ username: req.body.username }).exec()
     .then((user) => {
       if (bcrypt.compareSync(req.body.password, user.password) === true) {
-        const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_KEY, { expiresIn: '12h' });
-        return res.json({ message: 'Login successful.', token, username: user.username });
+        const token = jwt.sign({ username: user.username, id: user._id }, process.env.JWT_KEY, { expiresIn: '12h' });
+        return res.json({
+          message: 'Login successful.', token, username: user.username, id: user._id,
+        });
       }
       return res.status(400).json({ message: 'Login failed.' });
     })
@@ -80,7 +83,7 @@ exports.delete = (req, res) => {
     .then(() => Post.deleteMany({ username: req.tokenData.username }))
     .then(() => User.findByIdAndDelete(req.tokenData.id))
     .then(() => res.json('User deleted.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Follow User
@@ -90,7 +93,7 @@ exports.follow = (req, res) => {
     .then(() => User.findOneAndUpdate({ username: req.body.username },
       { $addToSet: { followers: req.tokenData.username } }, { runValidators: true }))
     .then(() => res.json('User Followed.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Unfollow User
@@ -100,7 +103,7 @@ exports.unfollow = (req, res) => {
     .then(() => User.findOneAndUpdate({ username: req.body.username },
       { $pull: { followers: req.tokenData.username } }, { runValidators: true }))
     .then(() => res.json('User Unfollowed.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Block User
@@ -110,7 +113,7 @@ exports.block = (req, res) => {
     .then(() => User.findByIdAndUpdate(req.tokenData.id,
       { $pull: { following: req.body.username } }, { runValidators: true }))
     .then(() => res.json('User blocked.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Unblock User
@@ -118,5 +121,5 @@ exports.unblock = (req, res) => {
   User.findByIdAndUpdate(req.tokenData.id, { $pull: { blocked: req.body.username } },
     { runValidators: true })
     .then(() => res.json('User Unblocked.'))
-    .catch(err => res.status(500).json(err));
+    .catch(() => res.status(500));
 };

@@ -11,7 +11,7 @@ exports.feed = (req, res) => {
   User.findOne({ username: req.params.username })
     .then(user => Post.find({ username: { $in: user.following } }).sort({ created: -1 }))
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(() => res.status(500));
 };
 
 // View Explore
@@ -25,14 +25,14 @@ exports.explore = (req, res) => {
       ],
     }).sort({ created: -1 }))
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(() => res.status(500));
 };
 
 // View Profile
 exports.profile = (req, res) => {
   Post.find({ username: req.params.username }).sort({ created: -1 })
     .then(post => res.json(post.slice(parseInt(req.params.from, 10), parseInt(req.params.to, 10))))
-    .catch(err => res.status(500).json({ message: err }));
+    .catch(() => res.status(500));
 };
 
 // Make Post
@@ -61,7 +61,7 @@ exports.delete = (req, res) => {
       }
       return res.status(403).json('Delete post failed.');
     })
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Like Post
@@ -69,7 +69,7 @@ exports.like = (req, res) => {
   Post.findByIdAndUpdate(req.body.id, { $addToSet: { likedBy: req.tokenData.username } },
     { runValidators: true })
     .then(() => res.json('Liked post.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Unlike Post
@@ -77,13 +77,13 @@ exports.unlike = (req, res) => {
   Post.findByIdAndUpdate(req.body.id, { $pull: { likedBy: req.tokenData.username } },
     { runValidators: true })
     .then(() => res.json('Unliked post.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };
 
 // Report Post
 exports.report = (req, res) => {
-  Post.findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.username } },
+  Post.findByIdAndUpdate(req.body.id, { $addToSet: { reportedBy: req.tokenData.id } },
     { runValidators: true })
     .then(() => res.json('Reported post.'))
-    .catch(err => res.status(500).json({ message: 'Error', error: err }));
+    .catch(() => res.status(500));
 };

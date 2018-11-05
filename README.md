@@ -38,7 +38,3 @@ And voila! You have your own copy of venomgram-server running, complete with per
 1. Operate entirely on endpoint params.
 2. Operate entirely on JSON web token.
 3. Optional. Will only update bio if not sent.
-
-# To-do
-
-* Implement email confirmation upon registration.
