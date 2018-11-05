@@ -48,9 +48,7 @@ exports.register = (req, res) => {
 
 // Login User
 exports.login = (req, res) => {
-  User
-    .findOne({ username: req.body.username })
-    .exec()
+  User.findOne({ username: req.body.username }).exec()
     .then((user) => {
       if (bcrypt.compareSync(req.body.password, user.password) === true) {
         const token = jwt.sign({ username: user.username, id: user.id }, process.env.JWT_KEY, { expiresIn: '12h' });
@@ -64,24 +62,18 @@ exports.login = (req, res) => {
 // Update User
 exports.update = (req, res) => {
   if (req.file == null) {
-    User
+    return User
       .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio }, { runValidators: true })
       .then(() => res.json('User updated.'))
-      .catch(err => res.status(500).json({ message: 'Error', error: err }));
+      .catch(() => res.status(500));
   }
-  cloudinary.v2.uploader.upload(req.file.path, {
+  return cloudinary.v2.uploader.upload(req.file.path, {
     public_id: req.tokenData.username, invalidate: true, format: 'jpg', tags: [req.tokenData.username],
-  },
-  (error, result) => {
-    if (error) {
-      return res.status(400).json(error);
-    }
-    return User
-      .findByIdAndUpdate(req.tokenData.id, { bio: req.body.bio || ' ', display: result.secure_url },
-        { runValidators: true })
-      .then(() => res.json('User updated.'))
-      .catch(err => res.status(500).json({ message: 'Error', error: err }));
-  });
+  })
+    .then(result => User.findByIdAndUpdate(req.tokenData.id,
+      { bio: req.body.bio || ' ', display: result.secure_url }, { runValidators: true }))
+    .then(() => res.json('User updated.'))
+    .catch(() => res.status(500));
 };
 
 // Delete User
