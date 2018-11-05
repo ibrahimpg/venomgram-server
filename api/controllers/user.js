@@ -17,21 +17,29 @@ exports.self = (req, res) => {
 
 // Register User
 exports.register = (req, res) => {
-  User.find({ username: req.body.username }).exec()
+  User
+    .find({ username: req.body.username })
+    .exec()
     .then((user) => {
       if (user.length >= 1 || req.body.password.length < 6) {
         return res.status(400).json({ message: 'Registration failed.' });
       }
       return cloudinary.v2.uploader.upload('./temp/placeholder.jpg',
-        { public_id: req.body.username, tags: [req.body.username] })
-        .then(result => new User({
-          _id: new mongoose.Types.ObjectId(),
-          username: req.body.username,
-          password: bcrypt.hashSync(req.body.password, 10),
-          bio: 'Bio...',
-          display: result.secure_url,
-        }).save()
-          .then(() => res.status(201).json('User created.')));
+        { public_id: `${req.body.username}`, tags: [req.body.username] },
+        (error, result) => {
+          if (error) {
+            return res.status(500).json(error);
+          }
+          return new User({
+            _id: new mongoose.Types.ObjectId(),
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password, 10),
+            bio: 'Bio...',
+            display: result.secure_url,
+          }).save()
+            .then(() => res.status(201).json('User created.'))
+            .catch(err => res.status(500).json({ message: err }));
+        });
     })
     .catch(err => res.status(500).json({ message: err }));
 };
