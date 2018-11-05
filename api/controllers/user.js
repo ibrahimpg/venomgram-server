@@ -11,7 +11,7 @@ const Post = require('../models/post');
 
 // View User Profile Username/Bio
 exports.user = (req, res) => {
-  User.findOne({ username: req.body.username })
+  User.findOne({ username: req.params.username })
     .then(user => res.json({
       bio: user.bio,
       username: user.username,

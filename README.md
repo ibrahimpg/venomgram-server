@@ -15,8 +15,8 @@ And voila! You have your own copy of venomgram-server running, complete with per
 
 ## API
 
-|Endpoint|JWT|Variables|
-|-|:-:|:-:|
+|Endpoint|JWT|Variables|Method|
+|-|:-:|:-:|:-:|
 | /post/feed/:username/:from/:to|X|None [1]|
 | /post/explore/:username/:from/:to|X|None [1]|
 | /post/profile/:username/:from/:to|X|None [1]|
@@ -25,7 +25,7 @@ And voila! You have your own copy of venomgram-server running, complete with per
 | /post/like|✓|id|
 | /post/unlike|✓|id|
 | /post/report|✓|id|
-| /user/user|X|username|
+| /user/user|X|None [1]|
 | /user/self|✓|None [2]|
 | /user/register|X|username, password|
 | /user/login|X|username, password|

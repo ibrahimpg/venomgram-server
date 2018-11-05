@@ -12,7 +12,7 @@ const authorization = require('../middleware/authorization');
 const UserControllers = require('../controllers/user');
 
 // View User Profile Username/Bio
-router.get('/user', UserControllers.user);
+router.get('/user/:username', UserControllers.user);
 
 // View Your Profile Details/Settings
 router.get('/self', authorization, UserControllers.self);
