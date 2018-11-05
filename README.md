@@ -17,24 +17,24 @@ And voila! You have your own copy of venomgram-server running, complete with per
 
 |Endpoint|JWT|Variables|Method|
 |-|:-:|:-:|:-:|
-| /post/feed/:username/:from/:to|X|None [1]|
-| /post/explore/:username/:from/:to|X|None [1]|
-| /post/profile/:username/:from/:to|X|None [1]|
-| /post/upload|✓|file|
-| /post/delete|✓|id|
-| /post/like|✓|id|
-| /post/unlike|✓|id|
-| /post/report|✓|id|
-| /user/user|X|None [1]|
-| /user/self|✓|None [2]|
-| /user/register|X|username, password|
-| /user/login|X|username, password|
-| /user/update|✓|file [3], bio|
-| /user/delete|✓|None [2]|
-| /user/follow|✓|username|
-| /user/unfollow|✓|username|
-| /user/block|✓|username|
-| /user/unblock|✓|username|
+| /post/feed/:username/:from/:to|X|None [1]|GET
+| /post/explore/:username/:from/:to|X|None [1]|GET
+| /post/profile/:username/:from/:to|X|None [1]|GET
+| /post/upload|✓|file|POST
+| /post/delete|✓|id|DELETE
+| /post/like|✓|id|PATCH
+| /post/unlike|✓|id|PATCH
+| /post/report|✓|id|PATCH
+| /user/user|X|None [1]|GET
+| /user/self|✓|None [2]|GET
+| /user/register|X|username, password|POST
+| /user/login|X|username, password|POST
+| /user/update|✓|file [3], bio|PATCH
+| /user/delete|✓|None [2]|DELETE
+| /user/follow|✓|username|PATCH
+| /user/unfollow|✓|username|PATCH
+| /user/block|✓|username|PATCH
+| /user/unblock|✓|username|PATCH
 
 1. Operate entirely on endpoint params.
 2. Operate entirely on JSON web token.
