@@ -25,6 +25,7 @@ And voila! You have your own copy of venomgram-server running, complete with per
 | /post/like|✓|id|
 | /post/unlike|✓|id|
 | /post/report|✓|id|
+| /user/user|X|username|
 | /user/self|✓|None [2]|
 | /user/register|X|username, password|
 | /user/login|X|username, password|

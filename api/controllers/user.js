@@ -9,7 +9,14 @@ const cloudinary = require('cloudinary');
 const User = require('../models/user');
 const Post = require('../models/post');
 
-// View Your Profile Details
+// View User Profile Username/Bio
+exports.user = (req, res) => {
+  User.findOne({ username: req.body.username })
+    .then(user => res.json({ bio: user.bio, username: user.username }))
+    .catch(() => res.status(500));
+};
+
+// View Your Profile Details/Settings
 exports.self = (req, res) => {
   User.findOne({ username: req.tokenData.username })
     .then(user => res.json(user))

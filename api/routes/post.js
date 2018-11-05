@@ -17,7 +17,7 @@ router.get('/feed/:username/:from/:to', PostControllers.feed);
 // View Explore
 router.get('/explore/:username/:from/:to', PostControllers.explore);
 
-// View Profile
+// View Profile Gallery
 router.get('/profile/:username/:from/:to', PostControllers.profile);
 
 // Make Post

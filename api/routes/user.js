@@ -11,7 +11,10 @@ const authorization = require('../middleware/authorization');
 // Controllers
 const UserControllers = require('../controllers/user');
 
-// View Your Profile Details
+// View User Profile Username/Bio
+router.get('/user', UserControllers.user);
+
+// View Your Profile Details/Settings
 router.get('/self', authorization, UserControllers.self);
 
 // Register User
