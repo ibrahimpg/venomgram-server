@@ -23,7 +23,7 @@ exports.register = (req, res) => {
         return res.status(400).json({ message: 'Registration failed.' });
       }
       return cloudinary.v2.uploader.upload('./temp/placeholder.jpg',
-        { public_id: `${req.body.username}`, tags: [req.body.username] })
+        { public_id: req.body.username, tags: [req.body.username] })
         .then(result => new User({
           _id: new mongoose.Types.ObjectId(),
           username: req.body.username,
