@@ -30,9 +30,9 @@ exports.explore = (req, res) => {
 
 // View Profile
 exports.profile = (req, res) => {
-  const bio = User.find({ username: req.params.username });
+  const user = User.findOne({ username: req.params.username });
   Post.find({ username: req.params.username }).sort({ created: -1 })
-    .then(post => res.json(bio.bio, post.slice(parseInt(req.params.from, 10),
+    .then(post => res.json(user.bio, post.slice(parseInt(req.params.from, 10),
       parseInt(req.params.to, 10))))
     .catch(() => res.status(500));
 };
