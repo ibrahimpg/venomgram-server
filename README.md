@@ -1,5 +1,5 @@
 # venomgram-server
-REST API built with Node/Express/MongoDB. Serves as the back-end for [Venomgram](https://venomgram.netlify.com/#/), an Instagram clone built with full-stack JavaScript. The UI was built with Vue, check that out [here.](https://github.com/ibrahimpg/venomgram-ui)
+REST API built with Node/Express/MongoDB. Serves as the back-end for [Venomgram](https://venomgram.com/#/), an Instagram clone built with full-stack JavaScript. The UI was built with Vue, check that out [here.](https://github.com/ibrahimpg/venomgram-ui)
 
 ## Instructions
 
