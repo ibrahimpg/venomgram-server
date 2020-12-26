@@ -6,7 +6,7 @@ const app = express();
 const UserRoute = require('./api/routes/user');
 const PostRoute = require('./api/routes/post');
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true }); //mlab to atlas migration has broken this
 
 app.use(express.json());
 
