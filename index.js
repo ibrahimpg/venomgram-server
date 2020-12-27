@@ -8,8 +8,6 @@ const PostRoute = require('./api/routes/post');
 
 // mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
-let db = '';
-
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,9 +15,12 @@ mongoose.connect(process.env.MONGODB_URI, {
   useCreateIndex: true
 });
 
-db = mongoose.connection;
+const db = mongoose.connection;
 
-console.log(db);
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('connected to db....');
+});
 
 app.use(express.json());
 
