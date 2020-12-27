@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   created: { type: Date, default: Date.now },
   username: {
