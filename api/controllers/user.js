@@ -31,6 +31,7 @@ exports.self = (req, res) => {
 
 // Register User
 exports.register = (req, res) => {
+  console.log("attempting reg...");
   User.find({ username: req.body.username }).exec()
     .then((user) => {
       if (user.length >= 1 || req.body.password.length < 6) {
