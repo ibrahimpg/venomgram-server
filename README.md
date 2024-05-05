@@ -1,17 +1,5 @@
 # venomgram-server
-REST API built with Node/Express/MongoDB. Serves as the back-end for [Venomgram](https://venomgram.com/#/), an Instagram clone built with full-stack JavaScript. The UI was built with Vue, check that out [here.](https://github.com/ibrahimpg/venomgram-ui)
-
-## Instructions
-
-It's actually very easy to get your own copy of venomgram-server running using Heroku and MongoDB Atlas.
-
-1. Fork this repository and create a Node.js Heroku dyno that is deployed via your new venomgram-server repository.
-
-2. Install the Cloudinary add-on to your Heroku dyno. Head to the MongoDB Atlas website and create a MongoDB cluster/database. Add the connection string provided by Atlas to your Heroku environmental variables under MONGODB_URI.
-
-3. Configure the remaining environmental variables you need: JWT_KEY (the secret key your app will use to sign JSON web tokens) and UI_URL (enabling CORS for the domain you will use [for your UI](https://github.com/ibrahimpg/venomgram-ui)).
-
-And voila! You have your own copy of venomgram-server running, complete with persistent data storage and a remote MongoDB database.
+REST API built with Node/Express/MongoDB. Archived. Outdated patterns used for MongoDB.
 
 ## API
 
